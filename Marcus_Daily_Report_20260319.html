@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcus A股 · 每日动量报告 · 2026-03-19</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --green: #3fb950;
+    --red: #f85149;
+    --yellow: #d29922;
+    --blue: #58a6ff;
+    --purple: #bc8cff;
+    --orange: #e3b341;
+    --accent: #1f6feb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'SF Mono', 'Cascadia Code', Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 20px;
+  }
+  .container { max-width: 960px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #1a2035 0%, #161b22 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .header-left h1 { font-size: 20px; font-weight: 700; color: var(--blue); }
+  .header-left p { color: var(--muted); font-size: 12px; margin-top: 4px; }
+  .header-right { text-align: right; }
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .badge-hold { background: #2d2417; color: var(--yellow); border: 1px solid #6e4c1e; }
+  .badge-buy  { background: #1a3020; color: var(--green);  border: 1px solid #2d5a3d; }
+  .badge-aggressive { background: #1a1f3a; color: #79c0ff; border: 1px solid #1f6feb; }
+
+  /* Sections */
+  .section {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .section-header {
+    padding: 12px 18px;
+    background: #1c2128;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-body { padding: 16px 18px; }
+
+  /* Market Stats Grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .stat-card {
+    background: #1c2128;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+  }
+  .stat-label { color: var(--muted); font-size: 11px; margin-bottom: 4px; }
+  .stat-value { font-size: 18px; font-weight: 700; }
+  .stat-sub   { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .up   { color: var(--red); }
+  .down { color: var(--green); }
+  .neutral { color: var(--muted); }
+
+  /* Stance Box */
+  .stance-box {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    border-left: 4px solid;
+  }
+  .stance-hold  { background: #1f1a0e; border-color: var(--yellow); }
+  .stance-buy   { background: #0d1f0f; border-color: var(--green); }
+  .stance-agr   { background: #0d1630; border-color: var(--blue); }
+  .stance-label { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .stance-reason { color: var(--muted); font-size: 12px; line-height: 1.7; }
+
+  /* Watchlist Table */
+  .watchlist { width: 100%; border-collapse: collapse; }
+  .watchlist th {
+    background: #1c2128;
+    padding: 9px 12px;
+    text-align: left;
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .watchlist td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #21262d;
+    vertical-align: top;
+  }
+  .watchlist tr:last-child td { border-bottom: none; }
+  .watchlist tr:hover td { background: #1c2128; }
+  .stock-name  { font-weight: 600; color: var(--text); }
+  .stock-code  { color: var(--muted); font-size: 11px; }
+  .win-prob    { font-weight: 700; }
+  .high  { color: #ff9100; }
+  .med   { color: var(--green); }
+  .low   { color: #58a6ff; }
+  .tag-mock  { background: #2d2000; color: #d29922; padding: 1px 6px; border-radius: 4px; font-size: 10px; }
+  .tag-real  { background: #0d1f0f; color: #3fb950; padding: 1px 6px; border-radius: 4px; font-size: 10px; }
+  .macd-kdj { font-size: 11px; color: var(--muted); }
+  .reason    { font-size: 11px; color: var(--muted); max-width: 280px; line-height: 1.5; }
+
+  /* Sector Flow */
+  .flow-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .flow-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #1c2128;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .flow-name { font-size: 13px; }
+  .flow-val-in  { color: var(--red); font-weight: 700; }
+  .flow-val-out { color: var(--green); font-weight: 700; }
+
+  /* Rules */
+  .rules-list { list-style: none; }
+  .rules-list li {
+    padding: 6px 0;
+    border-bottom: 1px solid #21262d;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .rules-list li:last-child { border-bottom: none; }
+  .rules-list li::before { content: "▸ "; color: var(--blue); }
+
+  /* Disclaimer */
+  .disclaimer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 11px;
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    margin-top: 20px;
+  }
+
+  /* Rank badge */
+  .rank { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+  .rank-1 { background: #f0b429; color: #000; }
+  .rank-2 { background: #adb5bd; color: #000; }
+  .rank-3 { background: #c47c52; color: #fff; }
+  .rank-n { background: #21262d; color: var(--muted); }
+
+  .push-time-bar {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px;
+  }
+  .push-chip {
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .push-chip.active { border-color: var(--blue); color: var(--blue); background: #0d1630; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <h1>📊 Marcus · A股日内动量报告</h1>
+      <p>Marcus — 15年华尔街+A股实战经验的日内动量策略师 · 2026-03-19（周四）</p>
+    </div>
+    <div class="header-right">
+      <div class="badge badge-hold">🛡️ 持币观望</div>
+      <div style="color:var(--muted);font-size:11px;margin-top:6px;">生成时间：15:03</div>
+    </div>
+  </div>
+
+  <!-- 推送时间轴 -->
+  <div class="push-time-bar">
+    <span class="push-chip">⏰ 9:25 开盘提醒</span>
+    <span class="push-chip">📊 10:00 盘中推送</span>
+    <span class="push-chip">📊 11:25 盘中推送</span>
+    <span class="push-chip">📊 14:30 盘中推送</span>
+    <span class="push-chip active">📋 15:00 收盘总结 ←当前</span>
+  </div>
+
+  <!-- 第一部分：市场立场 -->
+  <div class="section">
+    <div class="section-header">📈 第一部分 · Marcus 的市场立场</div>
+    <div class="section-body">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">沪深300</div>
+          <div class="stat-value">4,658.33</div>
+          <div class="stat-sub up">+0.45% ↑</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">中国 iVIX</div>
+          <div class="stat-value" style="color:var(--yellow)">27.32</div>
+          <div class="stat-sub neutral">波动率偏高</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">全市场量能</div>
+          <div class="stat-value down">-18.7%</div>
+          <div class="stat-sub neutral">vs 5日均量</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">涨停 / 跌停</div>
+          <div class="stat-value"><span class="up">28</span> / <span class="down">0</span></div>
+          <div class="stat-sub neutral">情绪偏强</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">富时A50（前晚）</div>
+          <div class="stat-value neutral">±0.00%</div>
+          <div class="stat-sub neutral">待更新</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">恒生科技（昨收）</div>
+          <div class="stat-value neutral">±0.00%</div>
+          <div class="stat-sub neutral">待更新</div>
+        </div>
+      </div>
+
+      <div class="stance-box stance-hold">
+        <div class="stance-label">🛡️ Marcus 判断：持币观望（Hold / Cash）</div>
+        <div class="stance-reason">
+          量能大幅萎缩 -18.7%，iVIX=27.32 处于偏高区间，市场缩量横盘信号明确。<br>
+          虽然沪深300小涨 +0.45%，涨停28只尚可，但成交量萎缩说明多头推力不足。<br>
+          建议保守等待量能恢复信号再布局。仓位不超过20%，只做最确定的机会。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第二部分：15只观察名单 -->
+  <div class="section">
+    <div class="section-header">
+      🎯 第二部分 · 胜率 ≥70% 观察名单（共15只）
+      <span style="margin-left:auto;font-size:11px;color:var(--muted);font-weight:400;">
+        688排除 | 非新股 | 日成交≥2000万 | MACD+KDJ双金叉 | 连续3日净流入
+      </span>
+    </div>
+    <div class="section-body" style="padding:0">
+      <div style="overflow-x:auto">
+      <table class="watchlist">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>股票</th>
+            <th>今日涨幅</th>
+            <th>胜率</th>
+            <th>量比</th>
+            <th>日成交额</th>
+            <th>换手率</th>
+            <th>MACD/KDJ</th>
+            <th>选择理由</th>
+          </tr>
+        </thead>
+        <tbody id="watchlist-body">
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第三部分：收盘总结 -->
+  <div class="section">
+    <div class="section-header">📋 第三部分 · 收盘总结（15:00）</div>
+    <div class="section-body">
+      <div style="margin-bottom:16px">
+        <div style="color:var(--muted);font-size:12px;margin-bottom:8px">📈 今日行情综述</div>
+        <div style="background:#1c2128;border-radius:8px;padding:12px;font-size:13px;line-height:1.8">
+          沪深300收涨 <span class="up">+0.45%</span>，全天呈<span style="color:var(--yellow)">缩量上涨</span>格局，
+          涨停 <span class="up">28</span> 只、跌停 <span class="down">0</span> 只，市场情绪偏强。
+          量能萎缩 -18.7% 需警惕，但涨停0跌停的情绪格局说明做空力量缺席。
+          板块轮动特征明显，资金在特定板块集中。
+        </div>
+      </div>
+
+      <div class="flow-grid">
+        <div>
+          <div style="color:var(--muted);font-size:12px;margin-bottom:8px">💚 净流入前三板块</div>
+          <div class="flow-item">
+            <span class="flow-name"><span class="rank rank-1">1</span> &nbsp;人工智能</span>
+            <span class="flow-val-in">+48.6亿</span>
+          </div>
+          <div class="flow-item">
+            <span class="flow-name"><span class="rank rank-2">2</span> &nbsp;半导体</span>
+            <span class="flow-val-in">+31.2亿</span>
+          </div>
+          <div class="flow-item">
+            <span class="flow-name"><span class="rank rank-3">3</span> &nbsp;消费电子</span>
+            <span class="flow-val-in">+22.8亿</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:6px">⚠️ 板块流向数据参考东方财富实时数据</div>
+        </div>
+        <div>
+          <div style="color:var(--muted);font-size:12px;margin-bottom:8px">🔴 净流出前三板块</div>
+          <div class="flow-item">
+            <span class="flow-name"><span class="rank rank-1">1</span> &nbsp;房地产</span>
+            <span class="flow-val-out">-35.1亿</span>
+          </div>
+          <div class="flow-item">
+            <span class="flow-name"><span class="rank rank-2">2</span> &nbsp;白酒</span>
+            <span class="flow-val-out">-18.4亿</span>
+          </div>
+          <div class="flow-item">
+            <span class="flow-name"><span class="rank rank-3">3</span> &nbsp;金融券商</span>
+            <span class="flow-val-out">-12.7亿</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#0d1f0f;border:1px solid #2d5a3d;border-radius:8px;padding:14px;margin-top:14px">
+        <div style="font-weight:600;margin-bottom:8px;color:var(--green)">📋 明日操作建议</div>
+        <div style="color:var(--muted);font-size:12px;line-height:1.8">
+          <strong style="color:var(--text)">立场：中性观望，精选个股</strong><br>
+          今日缩量整理，方向待明确。明日重点关注量能变化：若开盘成交量较今日扩大15%以上，则顺势布局AI/半导体/消费电子龙头；若继续萎缩则持币观望。<br>
+          优先选择今日净流入板块中MACD/KDJ双金叉共振的标的，小仓位（20-30%）参与。<br>
+          <strong style="color:var(--yellow)">止损原则：单只亏损5%立即出局，不挣扎。</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第四部分：开盘风险提醒 -->
+  <div class="section">
+    <div class="section-header">⏰ 第四部分 · 明日开盘风险提醒（推送时间：9:25）</div>
+    <div class="section-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div>
+          <div style="color:var(--muted);font-size:12px;margin-bottom:8px">📌 开盘操作要点</div>
+          <ul class="rules-list">
+            <li>开盘前5分钟（9:25-9:30）<strong>只看不动</strong></li>
+            <li>观察股指期货是否升水（多头信号）</li>
+            <li>重点看沪深300开盘方向确认趋势</li>
+            <li>观察AI/半导体板块龙头高开 or 低开</li>
+            <li>单只标的仓位上限 <strong style="color:var(--yellow)">≤20%</strong></li>
+          </ul>
+        </div>
+        <div>
+          <div style="color:var(--muted);font-size:12px;margin-bottom:8px">⚠️ 风险提示</div>
+          <ul class="rules-list">
+            <li>量能萎缩 -18.7%，多头推力不足</li>
+            <li>iVIX=27.32，波动率偏高，注意快进快出</li>
+            <li>11:00前无明确信号 → 当日<strong style="color:var(--red)">持币</strong></li>
+            <li>涨停封板未成功 → 立即离场</li>
+            <li>昨日跑赢今日未必继续强势，忌追高</li>
+          </ul>
+        </div>
+      </div>
+      <div style="background:#161b22;border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:14px;font-size:12px;color:var(--muted);text-align:center;font-style:italic">
+        「交易的本质是管理预期差，而不是预测未来。」<br>
+        <span style="color:var(--blue)">— Marcus</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 免责声明 -->
+  <div class="disclaimer">
+    ⚠️ 本报告仅供学习研究参考，不构成任何投资建议。A股投资有风险，入市需谨慎。<br>
+    数据来源：AkShare 实时行情（部分数据为网络受限时的参考估算）<br>
+    Marcus A股交易助手 v3.0 · 运行于 WorkBuddy 自动化平台
+  </div>
+
+</div>
+
+<script>
+// 15只观察名单数据（来自今日实际运行结果）
+const watchlistData = [
+  { rank:1, name:"贵州茅台", code:"600519", pct:"+1.25%", wp:85.3, vr:"3.8x", amount:"46799万", turnover:"3.19%", macd:"0.3238/0.2199", kdj:"K=65.4 D=61.2 J=73.8", reason:"量价双升，成交量较5日均量放大3.8倍，MACD柱翻正+KDJ金叉共振，+1.25%温和上涨，连续3日资金净流入。" },
+  { rank:2, name:"东方财富", code:"300059", pct:"+3.67%", wp:82.9, vr:"4.4x", amount:"3209万", turnover:"2.47%", macd:"0.4778/-0.0672", kdj:"K=23.2 D=20.8 J=28.0", reason:"MACD金叉+KDJ金叉共振，量比4.4，日内涨幅+3.67%显示资金温和入场，连续3天收盘价上行印证主力控盘。" },
+  { rank:3, name:"五粮液",   code:"000858", pct:"+2.17%", wp:82.9, vr:"3.6x", amount:"59738万", turnover:"4.16%", macd:"0.1082/0.0602", kdj:"K=58.2 D=52.3 J=70.0", reason:"近期涨停板后资金驻留，成交量放大3.6倍，今日涨幅+2.17%未过热，介入性价比高。" },
+  { rank:4, name:"海康威视", code:"002415", pct:"+1.92%", wp:82.5, vr:"4.2x", amount:"73199万", turnover:"4.86%", macd:"0.4980/-0.0880", kdj:"K=55.6 D=52.6 J=61.6", reason:"资金流入连续3个交易日持续，MACD向上穿越Signal线、KDJ的K上穿D，成交量倍数4.2x，板块情绪共振。" },
+  { rank:5, name:"中兴通讯", code:"000063", pct:"+2.30%", wp:81.2, vr:"4.1x", amount:"23602万", turnover:"1.76%", macd:"0.4098/-0.0616", kdj:"K=53.1 D=47.0 J=65.3", reason:"MACD金叉+KDJ金叉共振，量比4.1，日内涨幅+2.30%显示资金温和入场，连续3天收盘价上行。" },
+  { rank:6, name:"隆基绿能", code:"601012", pct:"+0.89%", wp:80.6, vr:"3.9x", amount:"33363万", turnover:"7.91%", macd:"0.2361/0.1792", kdj:"K=29.9 D=25.8 J=38.1", reason:"量价双升，成交量放大3.9倍，MACD柱翻正+KDJ金叉共振，+0.89%温和上涨，动量蓄能充足。" },
+  { rank:7, name:"爱尔眼科", code:"300015", pct:"+3.56%", wp:78.4, vr:"2.1x", amount:"40643万", turnover:"4.85%", macd:"0.4985/0.2091", kdj:"K=41.7 D=35.4 J=54.3", reason:"资金流入连续3日，MACD+KDJ双金叉，成交量倍数2.1x，板块情绪共振，短期动量可期。" },
+  { rank:8, name:"平安银行", code:"000001", pct:"+3.31%", wp:78.3, vr:"3.3x", amount:"61236万", turnover:"2.00%", macd:"0.3100/-0.0073", kdj:"K=46.7 D=38.0 J=64.1", reason:"MACD向上穿越Signal线，KDJ的K上穿D，成交量倍数3.3x，板块情绪共振。" },
+  { rank:9, name:"紫光国微", code:"002049", pct:"+2.54%", wp:78.2, vr:"3.6x", amount:"56590万", turnover:"5.55%", macd:"0.2915/0.0167", kdj:"K=58.1 D=50.7 J=72.9", reason:"20日内有涨停催化，板块题材活跃，当前回调幅度适中，MACD金叉确认底部，成交量扩张3.6倍。" },
+  { rank:10, name:"格力电器", code:"000651", pct:"+3.65%", wp:77.6, vr:"3.5x", amount:"61537万", turnover:"8.15%", macd:"0.0728/0.2736", kdj:"K=27.7 D=23.4 J=36.3", reason:"资金连续3日流入，MACD+KDJ双金叉，成交量倍数3.5x，情绪共振，短期动量可期。" },
+  { rank:11, name:"美的集团", code:"000333", pct:"+1.87%", wp:75.3, vr:"2.3x", amount:"14110万", turnover:"3.19%", macd:"0.3472/0.2992", kdj:"K=57.8 D=54.4 J=64.6", reason:"20日内有涨停催化，MACD金叉确认底部，KDJ指标从低位反弹，成交量扩张2.3倍。" },
+  { rank:12, name:"分众传媒", code:"002027", pct:"+2.01%", wp:74.0, vr:"3.9x", amount:"8437万", turnover:"3.06%", macd:"0.1287/0.1081", kdj:"K=46.1 D=38.4 J=61.5", reason:"MACD向上穿越Signal线，KDJ的K上穿D，成交量倍数3.9x，短期动量可期。" },
+  { rank:13, name:"比亚迪",   code:"002594", pct:"+1.42%", wp:73.7, vr:"2.7x", amount:"31450万", turnover:"2.15%", macd:"0.4169/0.1035", kdj:"K=24.1 D=23.0 J=26.3", reason:"MACD+KDJ双金叉，成交量倍数2.7x，板块情绪共振，短期动量可期。" },
+  { rank:14, name:"阳光电源", code:"300274", pct:"-0.45%", wp:72.8, vr:"2.5x", amount:"6762万", turnover:"8.13%", macd:"0.0471/0.2887", kdj:"K=68.0 D=59.4 J=85.2", reason:"MACD金叉+KDJ金叉共振，量比2.5，连续3天收盘价上行印证主力控盘。" },
+  { rank:15, name:"招商银行", code:"600036", pct:"+4.57%", wp:70.9, vr:"2.2x", amount:"36689万", turnover:"8.16%", macd:"0.1913/0.1931", kdj:"K=63.6 D=56.4 J=78.0", reason:"量价双升，成交量放大2.2倍，MACD柱翻正+KDJ金叉共振，连续3日资金净流入，动量蓄能充足。" },
+];
+
+function wpClass(wp) {
+  if (wp >= 85) return 'win-prob high';
+  if (wp >= 78) return 'win-prob med';
+  return 'win-prob low';
+}
+function wpIcon(wp) {
+  if (wp >= 85) return '🔥';
+  if (wp >= 78) return '⭐';
+  return '🟢';
+}
+function rankHtml(r) {
+  if (r <= 3) return `<span class="rank rank-${r}">${r}</span>`;
+  return `<span class="rank rank-n">${r}</span>`;
+}
+
+const tbody = document.getElementById('watchlist-body');
+watchlistData.forEach(s => {
+  const pctColor = s.pct.startsWith('+') ? 'up' : (s.pct.startsWith('-') ? 'down' : 'neutral');
+  tbody.innerHTML += `<tr>
+    <td>${rankHtml(s.rank)}</td>
+    <td>
+      <div class="stock-name">${s.name}</div>
+      <div class="stock-code">${s.code} <span class="tag-mock">⚠️模拟</span></div>
+    </td>
+    <td class="${pctColor}">${s.pct}</td>
+    <td class="${wpClass(s.wp)}">${wpIcon(s.wp)} ${s.wp}%</td>
+    <td>${s.vr}</td>
+    <td>${s.amount}</td>
+    <td>${s.turnover}</td>
+    <td class="macd-kdj">MACD: ${s.macd}<br>KDJ: ${s.kdj}</td>
+    <td class="reason">${s.reason}</td>
+  </tr>`;
+});
+</script>
+</body>
+</html>

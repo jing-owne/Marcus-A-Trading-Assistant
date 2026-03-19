@@ -1,0 +1,61 @@
+# Marcus A股交易助手自动化配置
+
+# 每日报告自动化
+[daily_report]
+description = "每日自动生成Marcus市场观点报告"
+command = "python Marcus_Final.py 市场观点"
+output_file = "Marcus_Daily_Report.md"
+schedule = "daily"  # 每天运行
+time = "09:00"     # 开盘前生成报告
+
+# 股票查询自动化
+[stock_queries]
+description = "定期查询关键股票"
+command = "python Marcus_Final.py"
+stocks = ["宁德时代", "比亚迪", "贵州茅台", "腾讯控股", "阿里巴巴"]
+schedule = "hourly"  # 每小时更新
+output_file = "Marcus_Stock_Reports.md"
+
+# Marcus系统配置
+[system_config]
+cache_enabled = true
+cache_expiry_hours = 6
+history_enabled = true
+max_history_entries = 100
+
+# Marcus分析参数
+[analysis_params]
+technical_weight = 60  # 技术面权重60%
+fundamental_weight = 40  # 基本面权重40%
+volume_multiplier_threshold = 3.0  # 成交量倍数阈值
+win_probability_min = 55  # 最小胜率概率
+win_probability_max = 85  # 最大胜率概率
+
+# 支持的股票列表
+[supported_stocks]
+a_shares = [
+    "宁德时代", "比亚迪", "贵州茅台", "东方财富", "药明康德",
+    "迈瑞医疗", "爱尔眼科", "中芯国际", "隆基绿能", "长江电力"
+]
+hk_us_stocks = [
+    "腾讯控股", "阿里巴巴", "美团点评", "京东集团", "百度",
+    "拼多多", "网易", "小米集团"
+]
+
+# Marcus市场立场判断标准
+[market_position_criteria]
+aggressive_buy_condition = "上证指数上涨>1% AND 成交量放大>20%"
+conservative_buy_condition = "上证指数±0.5%以内 AND 成交量稳定>0"
+hold_cash_condition = "上证指数跌幅>1% AND 成交量下降"
+
+# 安装说明
+[installation]
+python_version = "3.6+"
+required_modules = ["datetime", "random"]
+auto_run_command = "python Marcus_Final.py"
+
+# 使用说明
+[usage]
+interactive_mode = "python Marcus_Final.py"
+query_stock_command = "python Marcus_Final.py <股票名称或代码>"
+market_report_command = "python Marcus_Final.py 市场观点"

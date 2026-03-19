@@ -1,0 +1,35 @@
+# Python缓存
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# 数据缓存（运行时生成，不入库）
+marcus_data_cache.json
+stock_cache.json
+
+# 日报临时输出文件
+Marcus_Daily_Report_*.txt
+
+# 本地测试文件
+test_*.py
+
+# 其他项目文件（非Marcus）
+假期*.html
+假期*.csv
+假期*.json
+假期*.js
+最终假期余额.csv
+2025年假期余额.csv
+数据*.js
+数据*.py
+股票查询模块*.py
+美团次卡*.csv
+美团次卡*.txt
+美团次卡*.xlsx
+美团次卡需求测试/
+
+# 敏感配置
+*.env
+.env*

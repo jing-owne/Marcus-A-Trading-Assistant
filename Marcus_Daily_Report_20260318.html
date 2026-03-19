@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marcus Daily Momentum Report - 2026-03-18</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      padding: 32px 20px;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .header .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #f0b429, #e67e22);
+      color: #000;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #f0f6fc;
+      line-height: 1.3;
+    }
+
+    .header h1 span {
+      color: #f0b429;
+    }
+
+    .header .meta {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #8b949e;
+    }
+
+    .header .meta strong {
+      color: #58a6ff;
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid #21262d;
+      margin: 28px 0;
+    }
+
+    /* Section title */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #f0f6fc;
+      margin-bottom: 18px;
+    }
+
+    .section-title .icon {
+      width: 28px;
+      height: 28px;
+      background: #1f2937;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+    }
+
+    /* Market Status Card */
+    .market-card {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 12px;
+      padding: 22px 26px;
+      margin-bottom: 24px;
+    }
+
+    .market-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    @media (min-width: 600px) {
+      .market-stats { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    .stat-item {
+      background: #0d1117;
+      border: 1px solid #21262d;
+      border-radius: 10px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+
+    .stat-item .label {
+      font-size: 11px;
+      color: #8b949e;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-item .value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #f0f6fc;
+    }
+
+    .stat-item .value.up { color: #3fb950; }
+    .stat-item .value.neutral { color: #f0b429; }
+
+    /* Verdict */
+    .verdict-box {
+      background: linear-gradient(135deg, rgba(240,180,41,0.08), rgba(230,126,34,0.05));
+      border: 1px solid rgba(240,180,41,0.25);
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .verdict-box .verdict-icon {
+      font-size: 26px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .verdict-box .verdict-content .verdict-label {
+      font-size: 11px;
+      color: #8b949e;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .verdict-box .verdict-content .verdict-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #f0b429;
+      margin-bottom: 6px;
+    }
+
+    .verdict-box .verdict-content .verdict-reason {
+      font-size: 13px;
+      color: #8b949e;
+      line-height: 1.6;
+    }
+
+    /* Watchlist */
+    .watchlist {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .stock-card {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 12px;
+      padding: 18px 22px;
+      display: grid;
+      grid-template-columns: 32px 1fr auto;
+      gap: 14px;
+      align-items: start;
+      transition: border-color 0.2s;
+    }
+
+    .stock-card:hover {
+      border-color: #30363d;
+    }
+
+    .stock-rank {
+      width: 32px;
+      height: 32px;
+      background: #1f2937;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #58a6ff;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .stock-rank.top { background: rgba(240,180,41,0.15); color: #f0b429; }
+
+    .stock-body .stock-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #f0f6fc;
+      margin-bottom: 5px;
+    }
+
+    .stock-body .stock-reason {
+      font-size: 12px;
+      color: #8b949e;
+      line-height: 1.55;
+      margin-bottom: 8px;
+    }
+
+    .stock-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    .tag.catalyst {
+      background: rgba(88,166,255,0.1);
+      color: #58a6ff;
+      border: 1px solid rgba(88,166,255,0.2);
+    }
+
+    .tag.volume {
+      background: rgba(63,185,80,0.1);
+      color: #3fb950;
+      border: 1px solid rgba(63,185,80,0.2);
+    }
+
+    .win-rate {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .win-rate .rate-value {
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .win-rate .rate-value.high { color: #3fb950; }
+    .win-rate .rate-value.mid { color: #f0b429; }
+    .win-rate .rate-label {
+      font-size: 10px;
+      color: #8b949e;
+      margin-top: 3px;
+      text-align: center;
+    }
+
+    /* Win rate bar */
+    .rate-bar-bg {
+      width: 72px;
+      height: 4px;
+      background: #21262d;
+      border-radius: 2px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+
+    .rate-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #3fb950, #58a6ff);
+    }
+
+    .rate-bar-fill.mid {
+      background: linear-gradient(90deg, #f0b429, #e67e22);
+    }
+
+    /* Criteria */
+    .criteria-list {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin-bottom: 24px;
+    }
+
+    .criteria-list ol {
+      padding-left: 18px;
+    }
+
+    .criteria-list li {
+      font-size: 13px;
+      color: #8b949e;
+      line-height: 1.7;
+    }
+
+    .criteria-list li strong { color: #f0f6fc; }
+
+    /* Marcus Tip */
+    .tip-box {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-left: 3px solid #f0b429;
+      border-radius: 0 12px 12px 0;
+      padding: 18px 22px;
+      margin-top: 28px;
+    }
+
+    .tip-box .tip-header {
+      font-size: 12px;
+      font-weight: 700;
+      color: #f0b429;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .tip-box p {
+      font-size: 13px;
+      color: #8b949e;
+      line-height: 1.7;
+      margin-bottom: 6px;
+    }
+
+    .tip-box p:last-child { margin-bottom: 0; }
+
+    .tip-box strong { color: #f0f6fc; }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid #21262d;
+    }
+
+    .footer .sig {
+      font-size: 14px;
+      font-weight: 700;
+      color: #f0f6fc;
+    }
+
+    .footer .sig span { color: #f0b429; }
+
+    .footer .gen-time {
+      font-size: 12px;
+      color: #8b949e;
+      margin-top: 6px;
+    }
+
+    .footer .disclaimer {
+      font-size: 11px;
+      color: #484f58;
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="badge">Daily Momentum Report</div>
+    <h1>Marcus <span>A股市场</span> 日报</h1>
+    <div class="meta">
+      <strong>2026年3月18日（周三）</strong> &nbsp;·&nbsp; 报告生成时间：11:03
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Part 1: Market Stance -->
+  <div class="section-title">
+    <div class="icon">📊</div>
+    第一部分：Marcus 的市场立场
+  </div>
+
+  <div class="market-card">
+    <div class="market-stats">
+      <div class="stat-item">
+        <div class="label">市场情绪指数</div>
+        <div class="value up">77.81</div>
+      </div>
+      <div class="stat-item">
+        <div class="label">上证指数变化</div>
+        <div class="value up">+0.94%</div>
+      </div>
+      <div class="stat-item">
+        <div class="label">市场情绪</div>
+        <div class="value neutral">乐观</div>
+      </div>
+      <div class="stat-item">
+        <div class="label">成交量变化</div>
+        <div class="value up">+3.93%</div>
+      </div>
+    </div>
+
+    <div class="verdict-box">
+      <div class="verdict-icon">⚠️</div>
+      <div class="verdict-content">
+        <div class="verdict-label">Marcus 判断</div>
+        <div class="verdict-title">持币观望</div>
+        <div class="verdict-reason">
+          尽管情绪指数偏高，市场存在短期不确定性。资本保全为首要任务，等待更明确的方向信号再入场。保持耐心，机会不会消失。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Part 2: Watchlist -->
+  <div class="section-title">
+    <div class="icon">🎯</div>
+    第二部分：5% 观察名单
+  </div>
+
+  <div class="criteria-list">
+    <ol>
+      <li><strong>成交量异常放大</strong>（&gt;3倍日均成交量）</li>
+      <li><strong>接近关键技术支撑/阻力位</strong></li>
+      <li><strong>有短期催化剂</strong>（政策 / 行业 / 财报事件）</li>
+    </ol>
+  </div>
+
+  <div class="watchlist">
+
+    <!-- 1. 贵州茅台 -->
+    <div class="stock-card">
+      <div class="stock-rank top">1</div>
+      <div class="stock-body">
+        <div class="stock-name">贵州茅台 <small style="color:#8b949e;font-weight:400;font-size:12px;">600519</small></div>
+        <div class="stock-reason">RSI 显示超卖信号，成交量异常放大。政策催化剂临近，短期反弹机会较高。</div>
+        <div class="stock-tags">
+          <span class="tag catalyst">📌 政策催化剂</span>
+          <span class="tag volume">📈 成交量异常</span>
+        </div>
+      </div>
+      <div class="win-rate">
+        <div class="rate-value high">71.3%</div>
+        <div class="rate-label">胜率概率</div>
+        <div class="rate-bar-bg"><div class="rate-bar-fill" style="width:71.3%"></div></div>
+      </div>
+    </div>
+
+    <!-- 2. 隆基绿能 -->
+    <div class="stock-card">
+      <div class="stock-rank top">2</div>
+      <div class="stock-body">
+        <div class="stock-name">隆基绿能 <small style="color:#8b949e;font-weight:400;font-size:12px;">601012</small></div>
+        <div class="stock-reason">RSI 显示超卖信号，成交量异常。科技新品发布催化剂临近，光伏板块关注度上升。</div>
+        <div class="stock-tags">
+          <span class="tag catalyst">🚀 科技新品发布</span>
+          <span class="tag volume">📈 成交量异常</span>
+        </div>
+      </div>
+      <div class="win-rate">
+        <div class="rate-value high">70.0%</div>
+        <div class="rate-label">胜率概率</div>
+        <div class="rate-bar-bg"><div class="rate-bar-fill" style="width:70%"></div></div>
+      </div>
+    </div>
+
+    <!-- 3. 小米集团 -->
+    <div class="stock-card">
+      <div class="stock-rank">3</div>
+      <div class="stock-body">
+        <div class="stock-name">小米集团 <small style="color:#8b949e;font-weight:400;font-size:12px;">01810.HK</small></div>
+        <div class="stock-reason">盘前成交量放大 2.7 倍，RSI 超卖反弹机会。今天有并购 / 收购传闻事件，短期情绪催化。</div>
+        <div class="stock-tags">
+          <span class="tag catalyst">🔔 并购传闻·今天</span>
+          <span class="tag volume">📊 盘前量 ×2.7</span>
+        </div>
+      </div>
+      <div class="win-rate">
+        <div class="rate-value mid">68.7%</div>
+        <div class="rate-label">胜率概率</div>
+        <div class="rate-bar-bg"><div class="rate-bar-fill mid" style="width:68.7%"></div></div>
+      </div>
+    </div>
+
+    <!-- 4. 网易 -->
+    <div class="stock-card">
+      <div class="stock-rank">4</div>
+      <div class="stock-body">
+        <div class="stock-name">网易 <small style="color:#8b949e;font-weight:400;font-size:12px;">NTES</small></div>
+        <div class="stock-reason">盘前成交量放大 2.5 倍，成交量异常放大。下周有财报发布事件，提前布局窗口期。</div>
+        <div class="stock-tags">
+          <span class="tag catalyst">📋 财报发布·下周</span>
+          <span class="tag volume">📊 盘前量 ×2.5</span>
+        </div>
+      </div>
+      <div class="win-rate">
+        <div class="rate-value mid">64.5%</div>
+        <div class="rate-label">胜率概率</div>
+        <div class="rate-bar-bg"><div class="rate-bar-fill mid" style="width:64.5%"></div></div>
+      </div>
+    </div>
+
+    <!-- 5. 宁德时代 -->
+    <div class="stock-card">
+      <div class="stock-rank">5</div>
+      <div class="stock-body">
+        <div class="stock-name">宁德时代 <small style="color:#8b949e;font-weight:400;font-size:12px;">300750</small></div>
+        <div class="stock-reason">盘前成交量放大 4.4 倍，短期技术形态突破。本周内有政策催化剂事件，新能源板块联动效应。</div>
+        <div class="stock-tags">
+          <span class="tag catalyst">⚡ 政策催化剂·本周</span>
+          <span class="tag volume">📊 盘前量 ×4.4</span>
+        </div>
+      </div>
+      <div class="win-rate">
+        <div class="rate-value mid">63.7%</div>
+        <div class="rate-label">胜率概率</div>
+        <div class="rate-bar-bg"><div class="rate-bar-fill mid" style="width:63.7%"></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Marcus Tip -->
+  <div class="tip-box">
+    <div class="tip-header">⚡ Marcus 的忠告</div>
+    <p>持币观望是最好的策略。休息一天，观察市场情绪变化。</p>
+    <p>若出现极端波动机会（上证指数跌幅超过 2%），可考虑少量反向交易。</p>
+    <p><strong>Marcus 提醒：永远控制仓位大小，保护本金是第一原则。</strong></p>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="sig">Marcus &nbsp;·&nbsp; <span>A股交易助手</span></div>
+    <div class="gen-time">报告生成时间：2026-03-18 11:03 &nbsp;|&nbsp; 15年华尔街经验日内交易策略师</div>
+    <div class="disclaimer">
+      ⚠️ 本报告基于 Marcus 模型分析，仅供参考，不构成投资建议。投资有风险，入市需谨慎。<br>
+      用户应根据自身判断和风险承受能力做出独立投资决策。
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
