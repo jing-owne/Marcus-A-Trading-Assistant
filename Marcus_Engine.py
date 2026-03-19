@@ -484,11 +484,7 @@ def calc_win_probability(symbol: str, df_daily: "pd.DataFrame") -> float:
     if check_3day_net_inflow(df_daily):
         fund_score += 20
 
-    # 6. 20天内有涨停（题材活跃）
-    if check_had_limit_up_20d(df_daily):
-        fund_score += 10
-
-    # 7. 换手率
+    # 6. 换手率
     if "turnover" in df_daily.columns:
         tr = float(df_daily["turnover"].iloc[-1])
         if tr >= 3.0:
@@ -587,9 +583,9 @@ def screen_watchlist(target_size: int = WATCHLIST_SIZE) -> List[dict]:
             "turnover":  turnover,
         })
 
-    # 限制处理数量（避免API超时）
+    # 限制处理数量（1500只候选池，全量筛选）
     random.shuffle(candidates)
-    candidates = candidates[:300]
+    candidates = candidates[:1500]
 
     results = []
     for stock in candidates:
@@ -600,9 +596,6 @@ def screen_watchlist(target_size: int = WATCHLIST_SIZE) -> List[dict]:
                 continue
 
             # ── 技术筛选 ────────────────────────────
-            # 20天内有涨停
-            if not check_had_limit_up_20d(df_d):
-                continue
             # 20天总涨幅不超过20%
             if not check_total_rise_20d(df_d):
                 continue
